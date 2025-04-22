@@ -86,11 +86,16 @@ void terminal_putentryat(char c, int cx, int cy, uint32_t fg, uint32_t bg) {
 }
 
 void terminal_putchar(char c) {
-  terminal_putentryat(c, cursor_x, cursor_y, terminal_fg, terminal_bg);
-  if (++cursor_x == fb->common.framebuffer_width) {
+  if (c == '\n') {
     cursor_x = 0;
-    if (++cursor_y == fb->common.framebuffer_height) {
-      cursor_y = 0;
+    cursor_y++;
+  } else {
+    terminal_putentryat(c, cursor_x, cursor_y, terminal_fg, terminal_bg);
+    if (++cursor_x == fb->common.framebuffer_width) {
+      cursor_x = 0;
+      if (++cursor_y == fb->common.framebuffer_height) {
+        cursor_y = 0;
+      }
     }
   }
 }
@@ -110,5 +115,5 @@ void kernel_main(void* mbi) {
 
   terminal_initialise();
 
-  terminal_writestring("Hello, kernel World!\n");
+  terminal_writestring("Hello, kernel World!\nGoodbye, kernel World!");
 }
