@@ -6,8 +6,6 @@
 extern char _binary_font_psfu_start[];
 struct multiboot_tag_framebuffer* fb;
 
-#define PSF_FONT_MAGIC 0x864ab572
-
 typedef struct {
   uint32_t magic;
   uint32_t version;
@@ -18,6 +16,8 @@ typedef struct {
   uint32_t height;
   uint32_t width;
 } PSF_font;
+
+PSF_font* font = (PSF_font*)&_binary_font_psfu_start;
 
 void* find_multiboot_tag(void* mbi, multiboot_uint32_t tag_type) {
   struct multiboot_tag* tag = (struct multiboot_tag*)(uintptr_t)mbi + 8;
@@ -71,7 +71,6 @@ void terminal_setcolour(uint32_t fg, uint32_t bg) {
 }
 
 void terminal_putentryat(char c, int cx, int cy, uint32_t fg, uint32_t bg) {
-  PSF_font* font = (PSF_font*)&_binary_font_psfu_start;
   char* table = (char*)&_binary_font_psfu_start + font->headersize;
   char* glyph = table + c * font->bytesperglyph;
   uint32_t y = cy * font->height;
@@ -85,16 +84,37 @@ void terminal_putentryat(char c, int cx, int cy, uint32_t fg, uint32_t bg) {
   }
 }
 
+void terminal_scroll() {
+  uint8_t* fb_ptr = (uint8_t*)(uintptr_t)fb->common.framebuffer_addr;
+  uint32_t pitch = fb->common.framebuffer_pitch;
+  uint32_t fb_height = fb->common.framebuffer_height;
+  uint32_t font_height = font->height;
+  for (uint32_t i = pitch; i < pitch * fb_height; i++) {
+    if (i + pitch * font_height < pitch * fb_height) {
+      fb_ptr[i] = fb_ptr[i + pitch * font_height];
+    } else {
+      fb_ptr[i] = 0;
+    }
+  }
+}
+
 void terminal_putchar(char c) {
   if (c == '\n') {
     cursor_x = 0;
-    cursor_y++;
+    if (++cursor_y * font->height + font->height >=
+        fb->common.framebuffer_height) {
+      terminal_scroll();
+      cursor_y--;
+    }
   } else {
     terminal_putentryat(c, cursor_x, cursor_y, terminal_fg, terminal_bg);
-    if (++cursor_x == fb->common.framebuffer_width) {
+    if (++cursor_x * (font->width + 1) + font->width >=
+        fb->common.framebuffer_width) {
       cursor_x = 0;
-      if (++cursor_y == fb->common.framebuffer_height) {
-        cursor_y = 0;
+      if (++cursor_y * font->height + font->height >=
+          fb->common.framebuffer_height) {
+        terminal_scroll();
+        cursor_y--;
       }
     }
   }
@@ -115,5 +135,7 @@ void kernel_main(void* mbi) {
 
   terminal_initialise();
 
-  terminal_writestring("Hello, kernel World!\nGoodbye, kernel World!");
+  terminal_writestring("a\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk\nl\nm\nn\no\np\nq\nr\ns"
+                       "\nt\nu\nv\nw\nx\ny\nz\na\nb\nc\nd\ne\nf\ng\nh\ni\nj\nk"
+                       "\nl\nm\nn\no\np\nq\nr\ns\nt");
 }
