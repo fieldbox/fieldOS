@@ -51,6 +51,8 @@ _start:
 	/* set up the stack by setting the stack pointer register esp*/
 	mov $stack_top, %esp
 
+	call _init
+
 	push %ebx
 	call kernel_main
 

@@ -1,6 +1,3 @@
-.idea
-build/*
-!build/iso
-!build/iso/boot
-build/iso/boot/*
-!build/iso/boot/grub
+*.iso
+isodir
+sysroot
