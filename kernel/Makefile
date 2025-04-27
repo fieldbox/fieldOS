@@ -50,7 +50,7 @@ $(ARCHDIR)/crtn.o \
 $(ARCHDIR)/font.o \
 
 .PHONY: all clean install install-headers install-kernel
-.SUFFIXES: .o .c .S
+.SUFFIXES: .o .c .asm
 
 all: fieldos.kernel
 
@@ -64,8 +64,8 @@ $(ARCHDIR)/crtbegin.o $(ARCHDIR)/crtend.o:
 .c.o:
 	$(CC) -MD -c $< -o $@ -std=gnu11 $(CFLAGS) $(CPPFLAGS)
 
-.S.o:
-	$(CC) -MD -c $< -o $@ $(CFLAGS) $(CPPFLAGS)
+.asm.o:
+	nasm -f elf32 -o $@ $<
 
 clean:
 	rm -f fieldos.kernel
