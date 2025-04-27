@@ -1,3 +1,23 @@
+;    boot.asm - implements bootstrap stub 
+;    Copyright (C) 2025  fieldbox
+;
+;    This program is free software: you can redistribute it and/or modify
+;    it under the terms of the GNU General Public License as published by
+;    the Free Software Foundation, either version 3 of the License, or
+;    (at your option) any later version.
+;
+;    This program is distributed in the hope that it will be useful,
+;    but WITHOUT ANY WARRANTY; without even the implied warranty of
+;    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;    GNU General Public License for more details.
+;
+;    You should have received a copy of the GNU General Public License
+;    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+;    
+;    This file is based on material from the OSDev Wiki 
+;    (<https://wiki.osdev.org/>), which is licensed under CC0 (public domain
+;    dedication).
+
 %define MAGIC 0xE85250D6 ; multiboot magic number 
 %define ARCH 0 ; architecture 0 is 32-bit i386 
 %define HEADER_LENGTH multiboot_header_end - multiboot_header_start ; length of multiboot header 
