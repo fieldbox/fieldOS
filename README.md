@@ -1,24 +1,25 @@
 # fieldOS
 
-This is a small OS dev side project I'm making. I'm not really sure on what I want out of it right now - really I'm just using it to explore OS dev and improve my understanding of some lower-level stuff.
+fieldOS is a small side-project/hobby OS. This project is primarily for teaching me operating system concepts and improving my knowledge of C and x86 assembly.
 
 ## Building
 
-Building requires a cross-compiler to i686-elf, as well as GRUB to produce the final ISO (although, without GRUB, `build.sh` will still produce a .bin file for the kernel). Simply run `build.sh`, and `build/fieldOS.iso` will
-contain GRUB along with the OS.
+Building requires a cross-compiler to i686-elf, and optionally GRUB to produce a final bootable ISO and QEMU to run it. Run `clean.sh` to clean the working directory if the OS has been built before, then run `build.sh` 
+to create a kernel bin file or `iso.sh` to produce an ISO file containing GRUB. `qemu.sh` will produce an ISO and run it in QEMU.
 
 ## Current features
 
-Not much! Currently this OS has all the content from the [OSDev Wiki Bare Bones tutorial](https://wiki.osdev.org/Bare_Bones) implemented, albeit implemented with a framebuffer and a PSF font instead of using the VGA text mode
-buffer.
+Currently this project implements the [OSDev Wiki Meaty Skeleton tutorial](https://wiki.osdev.org/Meaty_Skeleton), using a framebuffer and PC Screen Font to display text instead of the VGA text buffer.
 
 ## Planned features
 
-I'm not 100% sure what kind of operating system I want to create. I at least plan to implement newlines and terminal scrolling and follow the [OSDev Meaty Skeleton tutorial](https://wiki.osdev.org/Meaty_Skeleton) (or at
-least use it to help structure the OS better). After this, I plan to implement paging, interrupts, memory management, scheduling, userspace and a shell, although since this is a hobby project, I may not get that far.
+Currently moving to the x86_64 architecture. 
 
 ## Attribution
 
-Many thanks to the [OSDev Wiki](https://wiki.osdev.org/) for their invaluable OS resources.
+This project is licensed under the GPLv3 license or any later version. See COPYING for more info. All GPLv3 licensed files contain a header at the top of the file that explains their licensing in more detail.
 
-`multiboot.h` acquired from the GRUB source code under MIT license.
+`kernel/include/kernel/multiboot.h` was acquired from the GRUB source code under the MIT license. See https://opensource.org/license/mit and the file itself for more info.
+
+This project incorporates content from the [OSDev Wiki](https://wiki.osdev.org), which is licensed under [CC0](https://creativecommons.org/publicdomain/zero/1.0/) (public domain dedication). While CC0 does not
+require attribution, files containing significant portions or which are entirely made up of OSDev Wiki code are attributed in the GPLv3 licensing header located at the top of the file.
